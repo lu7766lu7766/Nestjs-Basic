@@ -4,7 +4,7 @@ import { Env } from '../library/env';
 const path = require('path');
 const resolve = (...subpath) => path.join(__dirname, '..', '..', ...subpath);
 
-module.exports = {
+const dbConfig = {
   type: 'mysql',
   host: Env.get('DB_HOST'),
   port: Env.get('DB_PORT'),
@@ -14,6 +14,10 @@ module.exports = {
   seeds: [resolve('src/database/seeds/**/*{.ts,.js}')],
   factories: [resolve('src/database/factories/*{.ts,.js}')],
   synchronize: true,
+  migrations: [resolve('src/database/migrations/**/*{.ts,.js}')],
+  migrationsTableName: 'migration_schema',
   entities: [resolve('src/models/*{.ts,.js}')],
   logging: true,
 };
+
+module.exports = dbConfig;

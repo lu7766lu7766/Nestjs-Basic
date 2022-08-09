@@ -44,10 +44,25 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Notice
+## Migration
 
+```bash
+# watch entitys to generate diffirent or new schema code
+$ npm run migration:generate
+
+# run migration in new version
+$ npm run migration:run
+
+# rollback migration
+$ npm run migration:rollback
 ```
-// src/config/database.ts
-synchronize = true
-// 可以滿足多數細小調整，但會有資料無法回朔問題(例如數字轉字串，字串轉數字)，甚至無法變更欄位屬性(只能手動刪除資料庫重來)，建議之後還是要做migration
+
+## Seed
+
+```bash
+# run config
+$ npm run seed:config
+
+# run seeds
+$ npm run seed:run
 ```

@@ -22,7 +22,11 @@
     "seed-cli": "ts-node ./node_modules/typeorm-seeding/dist/cli.js -r ./src/config -n database.ts",
     "seed:config": "yarn seed-cli config",
     "seed:run": "yarn seed-cli seed",
-    "seed": "yarn seed:config && yarn seed:run"
+    "seed": "yarn seed:config && yarn seed:run",
+    "migration:cli": "npx typeorm-ts-node-commonjs -d src/config/migration.ts ",
+    "migration:generate": "yarn migration:cli migration:generate",
+    "migration:run": "yarn migration:cli migration:run",
+    "migration:rollback": "yarn migration:cli migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
