@@ -31,6 +31,12 @@ export class User extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ default: 1 })
+  type: number;
+
+  @Column({ default: 'MAIL' })
+  gender: string;
+
   @Column({ default: true })
   is_active: boolean;
 

@@ -19,8 +19,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -r ./src/config -n database.ts",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -r ./src/config -n database.ts",
+    "seed-cli": "ts-node ./node_modules/typeorm-seeding/dist/cli.js -r ./src/config -n database.ts",
+    "seed:config": "yarn seed-cli config",
+    "seed:run": "yarn seed-cli seed",
     "seed": "yarn seed:config && yarn seed:run"
   },
   "dependencies": {
