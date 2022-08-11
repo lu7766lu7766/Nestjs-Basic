@@ -13,13 +13,15 @@ import { Permission } from '../../models/permission';
 
 export default class InitialDatabaseSeed implements Seeder {
   public async run(factory: Factory, dataSource: DataSource): Promise<void> {
+    const adminId = 1,
+      guestId = 2;
     await dataSource
       .createQueryBuilder()
       .insert()
       .into(Role)
       .values([
-        { id: 1, name: 'Admin' },
-        { id: 2, name: 'Guest' },
+        { id: adminId, name: 'Admin' },
+        { id: guestId, name: 'Guest' },
       ])
       .execute();
 
@@ -31,7 +33,12 @@ export default class InitialDatabaseSeed implements Seeder {
         {
           email: 'lu7766lu7766@gmail.com',
           password: await Crypto.hash('lu90354'),
-          role_id: 1,
+          role_id: adminId,
+        },
+        {
+          email: 'test@test.com',
+          password: await Crypto.hash('test'),
+          role_id: guestId,
         },
       ])
       .execute();
@@ -41,11 +48,11 @@ export default class InitialDatabaseSeed implements Seeder {
       .insert()
       .into(Permission)
       .values([
-        { role_id: 1, code: 'READ', describe: 'read' },
-        { role_id: 1, code: 'CREATE', describe: 'create' },
-        { role_id: 1, code: 'UPDATE', describe: 'update' },
-        { role_id: 1, code: 'DELETE', describe: 'delete' },
-        { role_id: 2, code: 'READ', describe: 'read' },
+        { role_id: adminId, code: 'READ', describe: 'read' },
+        { role_id: adminId, code: 'CREATE', describe: 'create' },
+        { role_id: adminId, code: 'UPDATE', describe: 'update' },
+        { role_id: adminId, code: 'DELETE', describe: 'delete' },
+        { role_id: guestId, code: 'READ', describe: 'read' },
       ])
       .execute();
   }
