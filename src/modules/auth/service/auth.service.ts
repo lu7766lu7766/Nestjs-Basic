@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/modules/user/service/user.service';
 import { authConfig } from 'src/config/auth';
 import { ApiException } from 'src/exception/api.exception';
 import { Crypto } from 'src/library/crypto';
@@ -48,7 +47,7 @@ export class AuthService {
       currentUidKey = user[uidKey] == uid ? uidKey : currentUidKey;
     }
     if (!(await Crypto.compare(password, user[this.guarder.password]))) {
-      throw new ApiException(Auth1000.PASSWORD_NOT_MATCH, 'password not match');
+      throw new ApiException(Auth1000.PASSWORD_NOT_MATCH);
     }
 
     return this.generate({ uid, uidKey: currentUidKey, guard: this._guard });

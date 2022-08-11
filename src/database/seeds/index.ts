@@ -8,30 +8,45 @@ import { DataSource } from 'typeorm';
 
 import { User } from '../../models/user';
 import { Crypto } from '../../library/crypto';
-import { Post } from '../../models/post';
+import { Role } from '../../models/role';
+import { Permission } from '../../models/permission';
 
 export default class InitialDatabaseSeed implements Seeder {
   public async run(factory: Factory, dataSource: DataSource): Promise<void> {
-    const insertRes = await dataSource
+    await dataSource
+      .createQueryBuilder()
+      .insert()
+      .into(Role)
+      .values([
+        { id: 1, name: 'Admin' },
+        { id: 2, name: 'Guest' },
+      ])
+      .execute();
+
+    await dataSource
       .createQueryBuilder()
       .insert()
       .into(User)
       .values([
         {
-          uid: 'lu7766',
           email: 'lu7766lu7766@gmail.com',
           password: await Crypto.hash('lu90354'),
-          name: 'Jac',
+          role_id: 1,
         },
       ])
       .execute();
-    const userId = insertRes.identifiers[0].id;
 
     await dataSource
       .createQueryBuilder()
       .insert()
-      .into(Post)
-      .values([{ user_id: userId, title: 'title', content: 'content' }])
+      .into(Permission)
+      .values([
+        { role_id: 1, code: 'READ', describe: 'read' },
+        { role_id: 1, code: 'CREATE', describe: 'create' },
+        { role_id: 1, code: 'UPDATE', describe: 'update' },
+        { role_id: 1, code: 'DELETE', describe: 'delete' },
+        { role_id: 2, code: 'READ', describe: 'read' },
+      ])
       .execute();
   }
 }

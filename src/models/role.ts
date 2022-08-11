@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -6,25 +5,20 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  OneToMany,
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Role } from './role';
+import { Permission } from './permission';
+import { User } from './user';
 
 @Entity()
-export class User extends BaseEntity {
+export class Role extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  email: string;
-
-  @Exclude()
   @Column()
-  password: string;
-
-  @Column()
-  role_id: number;
+  name: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -32,7 +26,6 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToOne(() => Role)
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  @OneToMany(() => Permission, (permission) => permission.role)
+  permissions: Permission[];
 }

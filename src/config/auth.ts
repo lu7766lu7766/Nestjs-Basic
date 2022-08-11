@@ -33,7 +33,7 @@ export const authConfig: iAuthConfig = {
   guards: {
     user: {
       model: User,
-      uids: ['uid', 'email'],
+      uids: ['email'],
       password: 'password',
     },
   },

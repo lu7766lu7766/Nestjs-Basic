@@ -18,7 +18,6 @@ import { User } from 'src/models/user';
 import { UserService } from 'src/modules/user/service/user.service';
 import { AuthWithUserGuard } from 'src/modules/auth/guard/auth-with-user.guard';
 import { DB } from 'src/modules/common/service/db.service';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { LocalGuard } from '../../common/guard/local.guard';
 
 @Controller('test')
@@ -67,20 +66,6 @@ export class TestController {
   @UseGuards(AuthGuard)
   check(@CurrentUser() user: User) {
     return this.authService.use('user').check(user);
-  }
-
-  @Get('users')
-  @UseGuards(AuthGuard)
-  users() {
-    return this.userService.getUsersPosts(); //this.userService.findAll();
-  }
-
-  @Post('create/user')
-  @UsePipes(ValidationPipe)
-  createUser(@Body() { uid, email, password, name }: CreateUserDto) {
-    return this.DB.transaction(async () => {
-      return this.userService.createUser({ uid, email, password, name });
-    });
   }
 
   @Get('local')

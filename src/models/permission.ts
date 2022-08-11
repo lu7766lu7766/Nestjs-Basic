@@ -8,21 +8,21 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from './user';
+import { Role } from './role';
 
 @Entity()
-export class Post extends BaseEntity {
+export class Permission extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  user_id: number;
+  role_id: number;
 
   @Column()
-  title: string;
+  code: string;
 
   @Column()
-  content: string;
+  describe: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -30,7 +30,7 @@ export class Post extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 }

@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User2000 } from 'src/constants/api-code/user2000';
-import { ApiException } from 'src/exception/api.exception';
 import { Crypto } from 'src/library/crypto';
 import { User } from 'src/models/user';
+import { RequestService } from 'src/modules/common/service/request.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -11,56 +10,69 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private requestService: RequestService,
   ) {}
 
-  findAll() {
-    return this.usersRepository.find();
-  }
-
-  findOneByUid(uid) {
-    return this.usersRepository.findOneBy({ uid });
-  }
-
-  findOneBy(finder) {
-    return this.usersRepository.findOneBy(finder);
-  }
-
-  getUsersByQuery() {
-    return User.createQueryBuilder()
-      .where('uid = :uid', { uid: 'lu7766' })
+  list({ keyword, ...body }) {
+    console.log(keyword);
+    const [offset, perPage] = this.requestService.getPaginate(body);
+    return this.whereBuilder({ keyword })
+      .leftJoinAndSelect('user.role', 'role')
+      .leftJoinAndSelect('role.permissions', 'permissions')
+      .offset(offset)
+      .limit(perPage)
       .getMany();
   }
 
-  getUsersPosts() {
-    return this.usersRepository.find({
-      where: { uid: 'lu7766' },
-      relations: {
-        posts: true,
-      },
-    });
+  total({ keyword }) {
+    return this.whereBuilder({ keyword }).getCount();
   }
 
-  async createUser({
-    uid,
+  whereBuilder(body) {
+    const { keyword } = body;
+    const query = this.usersRepository.createQueryBuilder('user');
+
+    if (keyword) {
+      query.where('email like :keyword', { keyword: `%${keyword}%` });
+    }
+    return query;
+  }
+
+  async create({
     email,
     password,
-    name,
+    role_id,
   }: {
-    uid: string;
     email: string;
     password: string;
-    name: string;
+    role_id: number;
   }) {
-    // const count = await this.usersRepository.countBy({ uid });
-    // if (count) {
-    //   throw new ApiException(User2000.USER_EXISTS);
-    // }
     return this.usersRepository
       .merge(new User(), {
-        uid,
         email,
         password: await Crypto.hash(password),
-        name,
+        role_id,
+      })
+      .save();
+  }
+
+  async update({
+    id,
+    email,
+    password,
+    role_id,
+  }: {
+    id: number;
+    email: string;
+    password: string;
+    role_id: number;
+  }) {
+    const user = await this.usersRepository.findOneByOrFail({ id });
+    return this.usersRepository
+      .merge(user, {
+        email,
+        password: password ? await Crypto.hash(password) : undefined,
+        role_id,
       })
       .save();
   }

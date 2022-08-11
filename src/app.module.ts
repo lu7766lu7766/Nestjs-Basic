@@ -9,9 +9,12 @@ import { ApiInterceptor } from './interceptor/api.interceptor';
 import { TestModule } from './modules/test/test.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './models/user';
-import { Post } from './models/post';
+import { Role } from './models/role';
 import { UserModule } from './modules/user/user.module';
 import { HidePropInterceptor } from './interceptor/hide-prop.interceptor';
+import { LoginModule } from './modules/login/login.module';
+import { Permission } from './models/permission';
+import { UserController } from './modules/user/controller/user.controller';
 
 const ormConfig = require('./config/database');
 
@@ -22,11 +25,12 @@ const ormConfig = require('./config/database');
     TestModule,
     TypeOrmModule.forRoot({
       ...ormConfig,
-      entities: [User, Post],
+      entities: [User, Role, Permission],
     }),
     UserModule,
+    LoginModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UserController],
   providers: [
     AppService,
     {
