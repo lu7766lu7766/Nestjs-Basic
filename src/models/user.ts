@@ -33,6 +33,6 @@ export class User extends BaseEntity {
   updated_at: Date;
 
   @OneToOne(() => Role, { eager: true })
-  @JoinColumn({ name: 'roleId' })
+  @JoinColumn({ name: 'role_id' })
   role: Role;
 }
