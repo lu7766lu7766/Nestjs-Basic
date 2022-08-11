@@ -17,6 +17,7 @@ export type GuardModel = 'user'; // | 'user2'
 type iAuthConfig = {
   guard: GuardModel;
   guards: { [p in GuardModel]: iGuard };
+  expiresIn: string;
 };
 
 /*
@@ -37,4 +38,5 @@ export const authConfig: iAuthConfig = {
       password: 'password',
     },
   },
+  expiresIn: '30d',
 };
