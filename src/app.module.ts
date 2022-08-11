@@ -15,6 +15,7 @@ import { HidePropInterceptor } from './interceptor/hide-prop.interceptor';
 import { LoginModule } from './modules/login/login.module';
 import { Permission } from './models/permission';
 import { UserController } from './modules/user/controller/user.controller';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 const ormConfig = require('./config/database');
 
@@ -26,6 +27,7 @@ const ormConfig = require('./config/database');
     TypeOrmModule.forRoot({
       ...ormConfig,
       entities: [User, Role, Permission],
+      namingStrategy: new SnakeNamingStrategy(),
     }),
     UserModule,
     LoginModule,

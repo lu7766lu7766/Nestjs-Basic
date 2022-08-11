@@ -31,6 +31,6 @@ export class Permission extends BaseEntity {
   updated_at: Date;
 
   @ManyToOne(() => Role)
-  @JoinColumn({ name: 'role_id' })
+  @JoinColumn({ name: 'roleId' })
   role: Role;
 }

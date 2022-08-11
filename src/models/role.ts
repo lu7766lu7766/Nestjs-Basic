@@ -26,6 +26,6 @@ export class Role extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Permission, (permission) => permission.role)
+  @OneToMany(() => Permission, (permission) => permission.role, { eager: true })
   permissions: Permission[];
 }
